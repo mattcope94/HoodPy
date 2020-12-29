@@ -15,3 +15,12 @@ now= dt.datetime.now()
 
 df=pdr.get_data_yahoo(stock,start,now)
 print(df)
+
+#We are using these according to my strategy (to be used with pandas)
+ma = 20
+smaString = "Sma_"+str(ma)
+
+#Actually creating the sma's
+df[smaString]=df.iloc[:,3].rolling(window=ma).mean()
+
+print(df)
