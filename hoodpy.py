@@ -23,19 +23,38 @@ df["SMA_200"]=round(df.iloc[:,3].rolling(window=200).mean(),2)
 print(df)
 
 #To help keep track of trades and enter/exit status
-enter=False
+entered=False
 numHigh=0
 numLow=0
 
 #Loop through keeping track of closing price relative to those moving averages ^
 for i in df.index:
 
-    #Do this if the stock closed higher than the 20 day simple moving averagekk
+    sma20=df["SMA_20"][i]
+    #200 day simple moving average is used here as a point of reference/additional confluence
+    sma200=df["SMA_200"][i]
+    price=df["Adj Close"][i]
+
+    #Do this if the stock closed higher than the 20 day simple moving average
     if (df["Adj Close"][i]>df["SMA_20"][i]):
-        print("Close is higher")
+        print("Close is higher than 20 day SMA")
         numHigh+=1
+        if(entered==False):
+            print("Entering at "+price)
+            entered=True
+
     else:
-        print("Close is lower")
+        print("Close is lower  than 20 day SMA")
         numLow+=1
+        if(entered==True):
+            print("Selling at "+price)
+            entered=False
+
+    if (df["Adj Close"][i]>df["SMA_200"][i]):
+        print("Close is higher than 200 day SMA")
+    else:
+        print("Close is lower than 200 day SMA")
+        
+
 print("Close is higher "+str(numHigh)+" times.")
 print("Close is lower "+str(numLow)+" times.")
