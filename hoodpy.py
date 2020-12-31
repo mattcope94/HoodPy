@@ -16,7 +16,7 @@ now=dt.datetime.now()
 df=pdr.get_data_yahoo(stock,start,now)
 print(df)
 
-#We are using these simple moving averages according to my strategy
+#We are using these simple moving averages according to 20 day sma for now
 df["SMA_20"]=round(df.iloc[:,3].rolling(window=20).mean(),2)
 df["SMA_200"]=round(df.iloc[:,3].rolling(window=200).mean(),2)
 
@@ -26,6 +26,10 @@ print(df)
 entered=False
 numHigh=0
 numLow=0
+#specifically positions and their prices
+positions=0
+buyPrice=0
+sellPrice=0
 
 #Loop through keeping track of closing price relative to those moving averages ^
 for i in df.index:
@@ -40,20 +44,17 @@ for i in df.index:
         print("Close is higher than 20 day SMA")
         numHigh+=1
         if(entered==False):
-            print("Entering at "+price)
+            print("Entering at $"+str(round(price,2)))
             entered=True
 
     else:
         print("Close is lower  than 20 day SMA")
         numLow+=1
         if(entered==True):
-            print("Selling at "+price)
+            print("Selling at $"+str(round(price,2)))
             entered=False
 
-    if (df["Adj Close"][i]>df["SMA_200"][i]):
-        print("Close is higher than 200 day SMA")
-    else:
-        print("Close is lower than 200 day SMA")
+
         
 
 print("Close is higher "+str(numHigh)+" times.")
