@@ -46,6 +46,8 @@ for i in df.index:
         if(entered==False):
             print("Entering at $"+str(round(price,2)))
             entered=True
+            positions+=1
+            buyPrice+=price
 
     else:
         print("Close is lower  than 20 day SMA")
@@ -53,9 +55,13 @@ for i in df.index:
         if(entered==True):
             print("Selling at $"+str(round(price,2)))
             entered=False
+            sellPrice+=price
 
+#Messy analytics variables
+profit=sellPrice-buyPrice  
+closeOut=price+profit
 
-        
+print("Entered "+str(positions)+" positions netting $"+str(round(profit,2))+" profit.")
 
-print("Close is higher "+str(numHigh)+" times.")
-print("Close is lower "+str(numLow)+" times.")
+if entered==True:
+    print("Still holding "+stock+". Sell for $"+str(round(closeOut,2))+" profit.")
